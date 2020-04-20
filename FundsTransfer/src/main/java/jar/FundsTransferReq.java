@@ -1,17 +1,20 @@
 package jar;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class FundsTransferReq {
 	
 	
-	@NotNull(message="CustId can't be null")
+	@NotBlank(message="CustId can't be blank")
 	private String custId;
-	@NotNull(message="fromAcctNo can't be null")
+	
 	private long fromAcctNo;
-	@NotNull(message="toAcctNo can't be null")
+	
 	private long toAcctNo;
-	@NotNull(message="amount can't be null")
+	@DecimalMin(value="0.1",inclusive=true,message="min amount should be 0.1")
 	private double amount;
 	private String remarks;
 	public String getCustId() {

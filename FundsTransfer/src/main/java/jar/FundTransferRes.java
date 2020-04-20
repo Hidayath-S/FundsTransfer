@@ -1,5 +1,7 @@
 package jar;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -9,16 +11,18 @@ import javax.persistence.Table;
 public class FundTransferRes {
 	
 	@Id
-	private String paymentId;
+	private int paymentId;
 	private String paymentStatus;
 	private String custId;
 	private long fromAcctNo;
 	private long toAcctNo;
 	private double amount;
-	public String getPaymentId() {
+	private String remarks;
+	private LocalDate paymentCreatedDate;
+	public int getPaymentId() {
 		return paymentId;
 	}
-	public void setPaymentId(String paymentId) {
+	public void setPaymentId(int paymentId) {
 		this.paymentId = paymentId;
 	}
 	public String getPaymentStatus() {
@@ -51,6 +55,19 @@ public class FundTransferRes {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	public LocalDate getPaymentCreatedDate() {
+		return paymentCreatedDate;
+	}
+	public void setPaymentCreatedDate(LocalDate paymentCreatedDate) {
+		this.paymentCreatedDate = paymentCreatedDate;
+	}
+	
 	
 	
 	
