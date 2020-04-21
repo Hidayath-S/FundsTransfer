@@ -14,8 +14,8 @@ public class FundTransferRes {
 	private int paymentId;
 	private String paymentStatus;
 	private String custId;
-	private long fromAcctNo;
-	private long toAcctNo;
+	private String fromAcctNo;
+	private String toAcctNo;
 	private double amount;
 	private String remarks;
 	private LocalDate paymentCreatedDate;
@@ -37,16 +37,16 @@ public class FundTransferRes {
 	public void setCustId(String custId) {
 		this.custId = custId;
 	}
-	public long getFromAcctNo() {
+	public String getFromAcctNo() {
 		return fromAcctNo;
 	}
-	public void setFromAcctNo(long fromAcctNo) {
+	public void setFromAcctNo(String fromAcctNo) {
 		this.fromAcctNo = fromAcctNo;
 	}
-	public long getToAcctNo() {
+	public String getToAcctNo() {
 		return toAcctNo;
 	}
-	public void setToAcctNo(long toAcctNo) {
+	public void setToAcctNo(String toAcctNo) {
 		this.toAcctNo = toAcctNo;
 	}
 	public double getAmount() {
@@ -67,6 +67,7 @@ public class FundTransferRes {
 	public void setPaymentCreatedDate(LocalDate paymentCreatedDate) {
 		this.paymentCreatedDate = paymentCreatedDate;
 	}
+	
 	
 	
 	

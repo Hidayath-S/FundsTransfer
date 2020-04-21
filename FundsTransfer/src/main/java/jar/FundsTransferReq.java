@@ -11,9 +11,10 @@ public class FundsTransferReq {
 	@NotBlank(message="CustId can't be blank")
 	private String custId;
 	
-	private long fromAcctNo;
-	
-	private long toAcctNo;
+	@NotBlank(message="From account number shouldn't be blank")
+	private String fromAcctNo;
+	@NotBlank(message="To account number shouldn't be blank")
+	private String toAcctNo;
 	@DecimalMin(value="0.1",inclusive=true,message="min amount should be 0.1")
 	private double amount;
 	private String remarks;
@@ -23,16 +24,16 @@ public class FundsTransferReq {
 	public void setCustId(String custId) {
 		this.custId = custId;
 	}
-	public long getFromAcctNo() {
+	public String getFromAcctNo() {
 		return fromAcctNo;
 	}
-	public void setFromAcctNo(long fromAcctNo) {
+	public void setFromAcctNo(String fromAcctNo) {
 		this.fromAcctNo = fromAcctNo;
 	}
-	public long getToAcctNo() {
+	public String getToAcctNo() {
 		return toAcctNo;
 	}
-	public void setToAcctNo(long toAcctNo) {
+	public void setToAcctNo(String toAcctNo) {
 		this.toAcctNo = toAcctNo;
 	}
 	public double getAmount() {
