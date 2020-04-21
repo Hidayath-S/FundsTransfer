@@ -9,13 +9,16 @@ public class FundsTransferReq {
 	
 	
 	@NotBlank(message="CustId can't be blank")
+	@NotNull(message="CustId can't be null")
 	private String custId;
-	
+	@NotNull(message="From account number can't be null")
 	@NotBlank(message="From account number shouldn't be blank")
 	private String fromAcctNo;
+	@NotNull(message="To account number can't be null")
 	@NotBlank(message="To account number shouldn't be blank")
 	private String toAcctNo;
-	@DecimalMin(value="0.1",inclusive=true,message="min amount should be 0.1")
+	
+	@DecimalMin(value="0.1",inclusive=true,message="min transaction amount should be 0.1")
 	private double amount;
 	private String remarks;
 	public String getCustId() {

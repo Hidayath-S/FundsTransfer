@@ -37,7 +37,7 @@ public class FundsTransferController {
 		String response = "";
 
 		if (errors.hasErrors()) {
-			response = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.joining(","));
+			response = errors.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.joining(",  "));
 
 			er.setErrorCode(HttpStatus.NOT_ACCEPTABLE.value());
 			er.setErrorMessage(response);
