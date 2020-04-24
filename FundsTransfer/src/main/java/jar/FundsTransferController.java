@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,9 +44,9 @@ public class FundsTransferController {
 			er.setErrorMessage(response);
 			return ResponseEntity.ok(er);
 		} else {
-
 			ListAccountsEntity fromAcctsDetails = template.getForObject(
 					"http://localhost:8114/Account/" + fundsTransferReq.getFromAcctNo(), ListAccountsEntity.class);
+			
 
 			boolean custIdSts = (!fromAcctsDetails.getCustId().equals(fundsTransferReq.getCustId()));
 			boolean fromAcctBalance = fromAcctsDetails.getBalance() <= fundsTransferReq.getAmount();
