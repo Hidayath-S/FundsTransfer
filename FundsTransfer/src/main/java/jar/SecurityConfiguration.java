@@ -3,7 +3,9 @@ package jar;
 
 import java.net.PasswordAuthentication;
 
+import org.h2.server.web.WebServlet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -27,13 +29,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
 		http.authorizeRequests()
-		.antMatchers("/").permitAll().anyRequest().authenticated().and().httpBasic().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER).and().csrf().disable();
+		.antMatchers("/").permitAll().and().httpBasic().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER).and().csrf().disable();
+		
+		http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
+		http.headers().frameOptions().disable();
 		
 	}
 	
 	
 	
-	
+	@Bean
+    ServletRegistrationBean h2servletRegistration(){
+        ServletRegistrationBean registrationBean = new ServletRegistrationBean( new WebServlet());
+        registrationBean.addUrlMappings("/h2-console/*");
+        return registrationBean;
+    }
+
 	
 	@Bean
 	public PasswordEncoder passwordencoder() {
