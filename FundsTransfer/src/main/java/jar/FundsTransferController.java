@@ -2,11 +2,14 @@ package jar;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.h2.util.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Env;
 import org.springframework.http.HttpStatus;
@@ -22,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.core.env.Environment;
+import org.springframework.boot.json.*;
 
 import antlr.collections.List;
+
 
 @RestController
 @RequestMapping("/api")
@@ -33,17 +38,20 @@ public class FundsTransferController {
 	FundsTransferRepo repo;
 	@Autowired
 	private Environment env;
+	
 
 	ListAccountsEntity accts = new ListAccountsEntity();
 	RestTemplate template = new RestTemplate();
 	FundTransferRes res = new FundTransferRes();
 	ErrorResponse er = new ErrorResponse();
+	CustDetailsEntity cust=new CustDetailsEntity();
 	
 
 	@PostMapping(path = "payment", consumes = "application/json", produces = "application/json")
-	public Object transferMoney(@Valid @RequestBody FundsTransferReq fundsTransferReq, Errors errors) {
+	public Object transferMoney(@Valid @RequestBody FundsTransferReq fundsTransferReq, Errors errors) throws Exception {
 		String ListAcctBaseUrl=env.getProperty("ListAccounts.baseUrl");
 		String updtAcctBaseUrl=env.getProperty("updateAccounts.baseUrl");
+		String custDetailsBaseUrl=env.getProperty("custDetails.baseUrl");
 		String response = "";
 
 		if (errors.hasErrors()) {
@@ -114,11 +122,48 @@ public class FundsTransferController {
 				accts.setBalance(toAcctsDetails.getBalance() + res.getAmount());
 				accts.setCustId(toAcctsDetails.getCustId());
 				String updateToAcct = template.postForObject(updtAcctBaseUrl, accts, String.class);
+				
+				cust=template.getForObject(custDetailsBaseUrl+fundsTransferReq.getCustId(), CustDetailsEntity.class);
+				
+				Map<String, Object> custDetails=new HashMap<String, Object>();
+				custDetails.put("custId", cust.getCustId());
+				custDetails.put("FirstName", cust.getFirstName());
+				custDetails.put("LastName", cust.getLastName());
+				custDetails.put("SSN", cust.getSSN());
+				custDetails.put("ECN", cust.getECN());
+				custDetails.put("phoneNumber", cust.getPhoneNumber());
+				
+				
+//				jsonObj.put("paymentId", fundsTransferReq.getCustId());
+//				jsonObj.put("paymentStatus", "SUCCESS");
+//				jsonObj.put("fromAcctNo", fundsTransferReq.getFromAcctNo());
+//				jsonObj.put("toAcctNo", fundsTransferReq.getToAcctNo());
+//				jsonObj.put("CustomerDetails", jsonObj1);
+//				jsonObj.put("amount", fundsTransferReq.getAmount());
+//				jsonObj.put("remarks", fundsTransferReq.getRemarks());
+//				jsonObj.put("paymentCreatedDate", localDate);
+				
+				
+				Map<String, Object> pmtDetails=new HashMap<String, Object>();
+				
+				pmtDetails.put("paymentId", paymentCount);
+				pmtDetails.put("paymentStatus", "SUCCESS");
+				pmtDetails.put("fromAcctNo", fundsTransferReq.getFromAcctNo());
+				pmtDetails.put("toAcctNo", fundsTransferReq.getToAcctNo());
+				pmtDetails.put("customerDetails", custDetails);
+				pmtDetails.put("amount", fundsTransferReq.getAmount());
+				pmtDetails.put("remarks", fundsTransferReq.getRemarks());
+				pmtDetails.put("paymentCreatedDate", localDate);
+				
+				Map<String, Object> pmtResponse=new HashMap<String, Object>();
+				pmtResponse.put("PaymentResponse", pmtDetails);
+			
+				
 
-				return res;
+				return pmtResponse;
 			}
 
-			return null;
+			return "Payment creation was failed";
 
 		}
 
